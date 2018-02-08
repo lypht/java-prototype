@@ -1,6 +1,12 @@
-FROM maven:3.2-jdk-8 as build
+FROM alpine/git as clone
+ARG url
 WORKDIR /app
-COPY . /app
+RUN git clone ${url}
+
+FROM maven:3.2-jdk-8 as build
+ARG project
+WORKDIR /app
+COPY --from=clone /app/${project} /app
 RUN mvn clean package
 
 FROM openjdk:jdk-alpine
