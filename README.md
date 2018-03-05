@@ -38,7 +38,6 @@ export JAVAPROTOTYPE_MYSQL_CONNECTION_PASS="password"
 # Cloud Deployment
 1. GCP: Create a build trigger using `cloudbuild.yaml` linking your clone or fork of this repo.
 1. AWS: Include `buildspec.yaml` in a CodeBuild object linking your clone or fork of this repo. 
-    1. _NOTE_ The remaining instructions are GCP-centric.  Modify accordingly if not using GCP.
 
 There are two containers to build, a frontend (the java app) and a backend (the mysql database). _NOTE_ This is not a secure database image, and therefore should not be used in production.
 

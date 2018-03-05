@@ -24,6 +24,13 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            {{- if .Values.localDevEnvironment }}
+            - name: JAVAPROTOTYPE_MYSQL_CONNECTION_STRING
+              value: "jdbc:mysql://localhost:3306/java_prototype"
+            {{- else }}
+            - name: JAVAPROTOTYPE_MYSQL_CONNECTION_STRING
+              value: {{  .Values.conn }}
+            {{- end }}
             - name: JAVAPROTOTYPE_MYSQL_CONNECTION_STRING
               value: {{ .Values.env.conn }}
             - name: JAVAPROTOTYPE_MYSQL_CONNECTION_USER
