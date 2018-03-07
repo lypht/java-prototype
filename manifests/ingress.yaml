@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: java-prototype
+  labels:
+    app: java-prototype
+spec:
+  rules:
+    - host: java-prototype
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: java-prototype
+              servicePort: 8080
+---

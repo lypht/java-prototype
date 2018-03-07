@@ -131,8 +131,6 @@ helm delete --purge java java-prototype-mysql
 kubectl delete namespace java-prototype
 ```
 
-
-
 # Troubleshooting
 
 If you encounter any problems that the documentation does not address, [file an issue][3] or talk to us on the [Kubernetes Slack team][4] channel `#monolith`.
