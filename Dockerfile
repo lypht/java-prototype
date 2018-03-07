@@ -21,6 +21,7 @@ RUN mkdir -p $LOG_DIR
 # Docker daemon log rotation
 ADD docker/docker-container \
     /etc/logrotate.d/docker-container
+
 EXPOSE 8080
 ENTRYPOINT ["sh", "-c"]
 CMD ["java ${JAVA_OPTS} -jar *.jar --spring.config.location=${WORKDIR}/conf/"]

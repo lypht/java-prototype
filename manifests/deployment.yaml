@@ -1,0 +1,33 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: DEPLOYMENT
+  labels:
+    app: java-prototype
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-prototype
+  template:
+    metadata:
+      labels:
+        app: java-prototype
+    spec:
+      containers:
+        - name: java-prototype
+          image: REGISTRY/AUTHOR/IMAGE:TAG
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
