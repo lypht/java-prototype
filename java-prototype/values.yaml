@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: gcr.io/farmotive-io/java-prototype #Replace `farmotive-io` with your $PROJECT_ID
+  repository: quay.io/lypht/java-prototype #Replace `farmotive-io` with your $PROJECT_ID
   tag: latest
   pullPolicy: Always
 

@@ -56,7 +56,6 @@ export NAMESPACE=java-prototype
 export DEPLOY_NAME=java-prototype-mysql
 export JAVAPROTOTYPE_MYSQL_CONNECTION_PASS="password" #alter this if exposing this deployment externally
 export JAVAPROTOTYPE_MYSQL_CONNECTION_USER="java-prototype"
-export SIZE=1Gi #If cost is not a concern, increase this to a desired capacity, or omit ",persistence.size=$SIZE" below to use the default 10Gi allocation.
 ```
 
 Install the backend deployment:
@@ -66,7 +65,7 @@ kubectl create namespace java-prototype
 kubens java-prototype
 helm install --namespace $NAMESPACE \
 --name=$DEPLOY_NAME \
---set mysqlUser=$JAVAPROTOTYPE_MYSQL_CONNECTION_USER,mysqlPassword=$JAVAPROTOTYPE_MYSQL_CONNECTION_PASS,mysqlDatabase=java-prototype,persistence.size=$SIZE \
+--set mysqlUser=$JAVAPROTOTYPE_MYSQL_CONNECTION_USER,mysqlPassword=$JAVAPROTOTYPE_MYSQL_CONNECTION_PASS,mysqlDatabase=java-prototype,persistence.enabled=false \
 stable/mysql
 ```
 
