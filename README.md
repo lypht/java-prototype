@@ -196,6 +196,54 @@ helm install helm/java-prototype/ --namespace java-prototype --name java \
 
 Once the output of the `NOTES.txt` displays, run `kubectl get pods -w` to see the java deployment succeed.  Use `ctrl-C` to regain a prompt.
 
+### Creating an ingress with `contour` and secure connections with `cert-manager`
+Deploy contour with the manifest:
+```bash
+kubectl apply -f manifests/contour.yaml
+```
+Create an A record in CloudDNS (GCP) or a CNAME alias in Route53 (AWS) for a zone that you own and control, mapping to the external IP of the Loadbalancer created by the contour manifest.  For this example, we are using prototype.heptio.com.
+
+Create a CNAME alias for java-prototype.heptio.com that maps to the canonical name prototype.heptio.com.  
+Replace `heptio` in both records with your domain name.
+
+Clone the cert-manager repository and deploy:
+```bash
+git clone https://github.com/jetstack/cert-manager
+cd cert-manager
+kubectl -n cert-manager apply -f docs/deploy/rbac/
+```
+
+Create both cluster issuers, replacing `user@example.com` with your valid email address:
+```bash
+kubectl apply -f manifests/staging-issuer.yaml
+kubectl apply -f manifests/prod-issuer.yaml
+```
+
+Upgrade the java-prototype helm deployment by uncommenting lines 8,9 and 11-14 in helm/java-prototype/templates/ingress.yaml.  Then run:
+```bash
+helm upgrade java helm/java-prototype/
+```
+
+Certificates and secrets will be created.  Use `kubectl get certificate` and `kubectl get secret` to confirm creation.
+
+Test you ingress URL with the browser of your choice.  A self-signed certificate warning will display.
+
+To generate a CA signed certificate, replace the `letsencrypt-staging` clusterissuer value with `letsencrypt-prod` in helm/java-prototype/templates/ingress.yaml.
+Then repeat the command:
+```bash
+helm upgrade java helm/java-prototype/
+```
+
+Finally, delete the unsigned certificate and secret, causing contour to notify letsencrypt to create these objects anew with the production issuer:
+```bash
+kubectl delete certificate java
+kubectl delete secret java
+```
+
+The java-prototype URL should now have a valid HTTPS certificate.  
+
+_NOTE_ The above contour and cert-manager instructions were abridged from [Dave Cheney's technical deep-dive](https://blog.heptio.com/how-to-deploy-web-applications-on-kubernetes-with-heptio-contour-and-lets-encrypt-d58efbad9f56). Thanks, Dave!
+
 ### Manipulating the application
 _NOTE_ The following activities require multiple terminal sessions.
 
