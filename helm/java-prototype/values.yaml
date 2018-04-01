@@ -21,11 +21,24 @@ flywayPass:
 
 javaopts: "-Xmx2048m"
 
+# For local development, uncomment the ingress.class.  For cloud deployments, do not uncomment ingress class.
+
+ingress:
+  enabled: true
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # ertmanager.k8s.io/cluster-issuer: letsencrypt-staging
+    # kubernetes.io/tls-acme: "true"
+  # Base domain is the TLD of the url where the java application will resolve.  
+  # This will be prefixed by the app name when deployed with helm using contour.
+  basedomain: heptio.com
+
 service:
   type: NodePort
   port: 8080
 
-basedomain: heptio.com
+# Clusterissuer assigns the letsencrypt api object.  The staging endpoint creates the secret and certificate.  
+# Changing this to the production issuer will ensure a valid, signed certificate.
 clusterissuer: letsencrypt-staging
 
 resources:

@@ -1,21 +1,25 @@
+{{- if .Values.ingress.enabled -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ template "fullname" . }}
   labels:
+    app: {{ template "java-prototype.name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    release: {{ .Release.Name }}  
+    heritage: {{ .Release.Service }} 
   annotations:
-  #  kubernetes.io/tls-acme: "true"
-  #  certmanager.k8s.io/cluster-issuer: {{ .Values.clusterissuer }}
+{{ toYaml Values.ingress.annotations | indent 4 }}
 spec:
-  # tls:
+  tls: []
   # - secretName: {{ .Release.Name }}
   #  hosts:
-  #  - {{ .Release.Name }}.{{ .Values.basedomain }}
+  #  - {{ .Release.Name }}.{{ .Values.ingress.basedomain }}
   rules:
-  - host: {{ .Release.Name }}.{{ .Values.basedomain }}
+  - host: {{ .Release.Name }}.{{ .Values.ingress.basedomain }}
     http:
       paths:
       - backend:
           serviceName: {{ template "fullname" . }}
           servicePort: {{ .Values.service.port }}
+{{- end }}
